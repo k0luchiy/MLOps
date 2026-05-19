@@ -1,0 +1,33 @@
+stages:
+  prepare:
+    cmd: python src/stages/prepare_dataset.py
+    deps:
+      - src/stages/prepare_dataset.py
+      - data/insurance.csv
+      - src/config.yaml
+    outs:
+      - data/insurance_featurized.csv
+  split:
+    cmd: python src/stages/data_split.py
+    deps:
+      - src/stages/data_split.py
+      - data/insurance_featurized.csv
+    outs:
+      - data/train_insurance.csv
+      - data/test_insurance.csv
+  train:
+    cmd: python src/stages/train.py
+    deps:
+      - src/stages/train.py
+      - data/train_insurance.csv
+    outs:
+      - models/insurance_model.joblib
+  evaluate:
+    cmd: python src/stages/evaluate.py
+    deps:
+      - src/stages/evaluate.py
+      - models/insurance_model.joblib
+      - data/test_insurance.csv
+    metrics:
+      - report/metrics.json:
+          cache: false

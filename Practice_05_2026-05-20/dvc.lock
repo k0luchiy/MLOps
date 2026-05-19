@@ -1,0 +1,78 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/stages/prepare_dataset.py
+    deps:
+    - path: data/insurance.csv
+      hash: md5
+      md5: e3930fd2ddbc0704b1d59e0c67aaa081
+      size: 54351
+    - path: src/config.yaml
+      hash: md5
+      md5: d0eb69246ecce377c317d5543e1b00d1
+      size: 522
+    - path: src/stages/prepare_dataset.py
+      hash: md5
+      md5: 4c80123530a51222a6b286bd3fcd019f
+      size: 1259
+    outs:
+    - path: data/insurance_featurized.csv
+      hash: md5
+      md5: b3452f706d55516e5f464a092ad80a6d
+      size: 42324
+  split:
+    cmd: python src/stages/data_split.py
+    deps:
+    - path: data/insurance_featurized.csv
+      hash: md5
+      md5: b3452f706d55516e5f464a092ad80a6d
+      size: 42324
+    - path: src/stages/data_split.py
+      hash: md5
+      md5: 427047976e087edbf47375f28e6714a2
+      size: 520
+    outs:
+    - path: data/test_insurance.csv
+      hash: md5
+      md5: 72538e951634443d2e89d00cb959bfab
+      size: 8562
+    - path: data/train_insurance.csv
+      hash: md5
+      md5: 6e7103753b61f1212f23d51ce9692ed1
+      size: 33837
+  train:
+    cmd: python src/stages/train.py
+    deps:
+    - path: data/train_insurance.csv
+      hash: md5
+      md5: 6e7103753b61f1212f23d51ce9692ed1
+      size: 33837
+    - path: src/stages/train.py
+      hash: md5
+      md5: d635e6bfae16de7231304441d73202ea
+      size: 843
+    outs:
+    - path: models/insurance_model.joblib
+      hash: md5
+      md5: bdfc5608e3ac2e9d1bd28cc116340ac9
+      size: 948369
+  evaluate:
+    cmd: python src/stages/evaluate.py
+    deps:
+    - path: data/test_insurance.csv
+      hash: md5
+      md5: 72538e951634443d2e89d00cb959bfab
+      size: 8562
+    - path: models/insurance_model.joblib
+      hash: md5
+      md5: bdfc5608e3ac2e9d1bd28cc116340ac9
+      size: 948369
+    - path: src/stages/evaluate.py
+      hash: md5
+      md5: 35a40330f543ebfea3fe04037547c471
+      size: 725
+    outs:
+    - path: report/metrics.json
+      hash: md5
+      md5: 3d4c2918ced08ff93f9a20b41adae3f3
+      size: 63

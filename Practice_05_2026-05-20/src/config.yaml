@@ -1,0 +1,17 @@
+data_load:
+  dataset_csv: "data/insurance.csv"
+featurize:
+  features_path: "data/insurance_featurized.csv"
+data_split:
+  test_size: 0.2
+  trainset_path: "data/train_insurance.csv"
+  testset_path: "data/test_insurance.csv"
+train:
+  cv: 5
+  model_type: "rf" # Давай оставим Random Forest, как в прошлых лабах
+  n_estimators: [100, 200]
+  max_depth: [5, 10]
+  model_path: "models/insurance_model.joblib"
+test:
+  model_path: "models/insurance_model.joblib"
+  testset_path: "data/test_insurance.csv"
